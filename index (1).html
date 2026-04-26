@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matthew Crowe — Product Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Themes ── */
+    :root {
+      --bg: #ffffff;
+      --fg: #0a0a0a;
+      --muted: #888888;
+      --dim: #cccccc;
+      --divider: rgba(0,0,0,0.12);
+      --font: 'Inter', sans-serif;
+    }
+
+    :root.dark {
+      --bg: #000000;
+      --fg: #ffffff;
+      --muted: #888888;
+      --dim: #3a3a3a;
+      --divider: rgba(255,255,255,0.13);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Page shell — mobile first ── */
+    .page { padding: 40px 20px 80px; }
+
+    /* ── Hero ── */
+    .hero {
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.65s ease forwards;
+    }
+
+    .hero__name {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--fg);
+      margin-bottom: 12px;
+    }
+
+    .hero__headline {
+      font-size: clamp(24px, 7.5vw, 28px);
+      font-weight: 600;
+      line-height: 1.22;
+      letter-spacing: -0.025em;
+      color: var(--fg);
+    }
+
+    /* ── Sections ── */
+    .section {
+      padding: 28px 0;
+      border-top: 1px solid var(--divider);
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .section:nth-child(2) { animation: fadeUp 0.65s 0.12s ease forwards; }
+    .section:nth-child(3) { animation: fadeUp 0.65s 0.22s ease forwards; }
+    .section:nth-child(4) { animation: fadeUp 0.65s 0.32s ease forwards; }
+    .section:nth-child(5) { animation: fadeUp 0.65s 0.42s ease forwards; }
+
+    .section__label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 18px;
+    }
+
+    /* ── About ── */
+    .about__text {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.78;
+      color: var(--muted);
+    }
+
+    /* ── Entries — mobile: stacked ── */
+    .entry {
+      padding: 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .entry__title {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--fg);
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+    }
+
+    .entry__meta {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    .entry__meta .sep { margin: 0 5px; opacity: 0.45; }
+
+    .entry--link .entry__title {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: var(--dim);
+      transition: text-decoration-color 0.2s;
+    }
+    .entry--link:hover .entry__title { text-decoration-color: var(--fg); }
+
+    /* ── Show/hide helpers ── */
+    .desktop-only { display: none; }
+    .mobile-only  { display: flex; flex-direction: column; gap: 3px; }
+
+    /* ── Theme indicator (small dot, top-right) ── */
+    .theme-badge {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Desktop 680px+ ── */
+    @media (min-width: 680px) {
+      .desktop-only { display: contents; }
+      .mobile-only  { display: none; }
+
+      .page {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 72px 48px 100px;
+      }
+
+      .hero { margin-bottom: 80px; }
+      .hero__name { font-size: 14px; }
+      .hero__headline { font-size: 38px; max-width: 560px; }
+
+      .section { padding: 40px 0; }
+
+      .entry {
+        display: grid;
+        grid-template-columns: 96px 32px 1fr;
+        align-items: baseline;
+        flex-direction: unset;
+        gap: 0;
+        padding: 10px 0;
+      }
+
+      .entry__date-d {
+        font-size: 13px;
+        font-weight: 300;
+        color: var(--muted);
+      }
+
+      .entry__arrow-d {
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .entry__body-d { display: flex; flex-direction: column; }
+
+      .entry__title-d {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--fg);
+        letter-spacing: -0.01em;
+      }
+
+      .entry__sub-d {
+        font-size: 12.5px;
+        font-weight: 300;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      .entry--link .entry__title-d {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        text-decoration-color: var(--dim);
+        transition: text-decoration-color 0.2s;
+      }
+      .entry--link:hover .entry__title-d { text-decoration-color: var(--fg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-badge"></div>
+
+  <main class="page">
+
+    <header class="hero">
+      <p class="hero__name">Matthew Crowe</p>
+      <h1 class="hero__headline">Product Designer with a focus on systems thinking and product strategy.</h1>
+    </header>
+
+    <section class="section">
+      <h2 class="section__label">About</h2>
+      <p class="about__text">
+        I'm a Senior Product Designer with experience shaping enterprise-level product strategy at scale.
+        I've led design across complex ecosystems at Cigna and BetMGM — translating business goals into
+        intuitive, high-impact experiences for large user bases. I work best at the intersection of strategy
+        and craft, partnering with product and engineering to drive decisions that move the needle.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 class="section__label">Work Experience</h2>
+
+      <div class="entry">
+        <div class="mobile-only">
+          <span class="entry__title">Sr Product Designer at BetMGM</span>
+          <span class="entry__meta">2022–2025<span class="sep">•</span>Jersey City, NJ</span>
+        </div>
+        <div class="desktop-only">
+          <span class="entry__date-d">2022–2025</span>
+          <span class="entry__arrow-d">→</span>
+          <div class="entry__body-d">
+            <span class="entry__title-d">Sr Product Designer at BetMGM</span>
+            <span class="entry__sub-d">Jersey City, NJ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="mobile-only">
+          <span class="entry__title">Product Designer at Cigna</span>
+          <span class="entry__meta">2018–2022<span class="sep">•</span>Santa Monica, CA</span>
+        </div>
+        <div class="desktop-only">
+          <span class="entry__date-d">2018–2022</span>
+          <span class="entry__arrow-d">→</span>
+          <div class="entry__body-d">
+            <span class="entry__title-d">Product Designer at Cigna</span>
+            <span class="entry__sub-d">Santa Monica, CA</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section__label">Education</h2>
+
+      <div class="entry">
+        <div class="mobile-only">
+          <span class="entry__title">University of Connecticut</span>
+          <span class="entry__meta">2015–2019</span>
+        </div>
+        <div class="desktop-only">
+          <span class="entry__date-d">2015–2019</span>
+          <span class="entry__arrow-d">→</span>
+          <div class="entry__body-d">
+            <span class="entry__title-d">University of Connecticut</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section__label">Contact</h2>
+
+      <a href="https://linkedin.com/in/matthewcrowe" target="_blank" rel="noopener" class="entry entry--link">
+        <div class="mobile-only">
+          <span class="entry__title">LinkedIn</span>
+          <span class="entry__meta">Matthew Crowe</span>
+        </div>
+        <div class="desktop-only">
+          <span class="entry__date-d">LinkedIn</span>
+          <span class="entry__arrow-d">→</span>
+          <div class="entry__body-d">
+            <span class="entry__title-d">Matthew Crowe</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="mailto:matthewcrowe451@gmail.com" class="entry entry--link">
+        <div class="mobile-only">
+          <span class="entry__title">Email</span>
+          <span class="entry__meta">matthewcrowe451@gmail.com</span>
+        </div>
+        <div class="desktop-only">
+          <span class="entry__date-d">Email</span>
+          <span class="entry__arrow-d">→</span>
+          <div class="entry__body-d">
+            <span class="entry__title-d">matthewcrowe451@gmail.com</span>
+          </div>
+        </div>
+      </a>
+    </section>
+
+  </main>
+
+  <script>
+    // Dark = 6pm–6am, Light = 6am–6pm
+    function applyTheme() {
+      const hour = new Date().getHours();
+      const isDark = hour >= 18 || hour < 6;
+      document.documentElement.classList.toggle('dark', isDark);
+    }
+
+    applyTheme();
+
+    // Re-check every minute in case the page stays open across threshold
+    setInterval(applyTheme, 60 * 1000);
+  </script>
+</body>
+</html>
