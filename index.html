@@ -735,6 +735,26 @@
   .ba-pair img{ display:block; max-width:100%; max-height:430px; width:auto; height:auto; }
   .ba-pair figcaption{ font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-dim-hover); }
   @media (max-width:640px){ .ba-pair{ padding:20px 12px 16px; gap:10px; } .ba-pair img{ max-height:300px; } }
+  /* Password gate on case studies. A simple lock screen: it keeps casual visitors out, the content is still in the page. */
+  body.locked .view .case-scroll{ visibility:hidden; }
+  .case-lock{ display:none; position:absolute; inset:0; z-index:3; align-items:center; justify-content:center; padding:24px; }
+  body.locked .view .case-lock{ display:flex; }
+  .case-lock form{ width:min(340px, 100%); text-align:center; }
+  .case-lock svg{ color:var(--ink-dim-hover); margin-bottom:18px; }
+  .case-lock h2{ margin:0 0 8px; font-size:17px; font-weight:500; color:var(--ink); }
+  .case-lock p{ margin:0 0 22px; font-size:13.5px; line-height:1.5; color:var(--ink-dim-hover); }
+  .case-lock p a{ color:var(--ink); }
+  .case-lock .lock-row{ display:flex; gap:8px; }
+  .case-lock input{ flex:1; min-width:0; height:44px; padding:0 14px; border-radius:12px; border:1px solid var(--card-border); background:var(--card); color:var(--ink);
+    font:inherit; font-size:15px; outline:none; transition:border-color 200ms ease; }
+  .case-lock input:focus{ border-color:var(--ink-dim-hover); }
+  .case-lock button{ height:44px; padding:0 18px; border-radius:12px; border:1px solid var(--ink); background:var(--ink); color:var(--bg); font:inherit; font-size:14px; font-weight:500; cursor:pointer;
+    transition:transform 180ms var(--spring); }
+  .case-lock button:hover{ transform:scale(1.03); }
+  .case-lock .lock-err{ min-height:18px; margin:10px 0 0; font-size:12.5px; color:#e0786f; }
+  .case-lock form.bad{ animation:lockShake 360ms ease; }
+  @keyframes lockShake{ 20%{ transform:translateX(-7px); } 40%{ transform:translateX(6px); } 60%{ transform:translateX(-4px); } 80%{ transform:translateX(2px); } }
+  @media (prefers-reduced-motion:reduce){ .case-lock form.bad{ animation:none; } }
   .photo-reel{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin:30px 0 12px; }
   .photo-reel img{ display:block; width:100%; height:100%; object-fit:cover; border-radius:12px; border:1px solid var(--card-border); }
   .photo-reel img:first-child{ grid-column:1 / -1; }
@@ -1432,7 +1452,7 @@
         <h1>Unifying a $1.3B Sportsbook</h1>
 
         <h2>Role</h2>
-        <p>I led design for BetMGM's three core journeys, onboarding, discovery and bet placement, across mobile, web and kiosk, on a team of seven. On onboarding and discovery I worked with a designer who ran research and usability testing. As each journey became its own workstream, I helped set up the team and hire the designers who took them over.</p>
+        <p>I owned design for BetMGM's three core journeys, onboarding, discovery and bet placement, across mobile, web and kiosk, on a team of seven. On onboarding and discovery I worked with a designer who ran research and usability testing. As each journey became its own workstream, I helped set up the team and hire the designers who took them over.</p>
 
         <h2>Context</h2>
         <p>BetMGM made about $1.3B in net revenue across 23 markets, but it had grown fast and through acquisitions. Sports, Casino and Player Experience felt like three separate products, each with its own look, navigation and patterns.</p>
@@ -2669,6 +2689,41 @@
       const toggle = () => r.classList.toggle('paused');
       r.addEventListener('click', toggle);
       r.addEventListener('keydown', e => { if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); toggle(); } });
+    });
+  })();
+</script>
+<script>
+  // Password gate for the case studies. Unlocking once opens all of them for this browser tab.
+  (function(){
+    const KEY = 535868834, STORE = 'mc-cases-unlocked';
+    const hash = v => { let h = 5381; for(const ch of v) h = ((h * 33) ^ ch.charCodeAt(0)) >>> 0; return h; };
+    let open = false;
+    try{ open = sessionStorage.getItem(STORE) === '1'; }catch(e){}
+    if(open) return;
+    document.body.classList.add('locked');
+    const views = [...document.querySelectorAll('.view')].filter(v => v.querySelector('.case-scroll'));
+    views.forEach((v, i) => {
+      if(getComputedStyle(v).position === 'static') v.style.position = 'relative';
+      const box = document.createElement('div'); box.className = 'case-lock';
+      box.innerHTML = '<form novalidate><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>'
+        + '<h2>This case study is password protected</h2><p>Enter the password to view it. Need access? Email <a href="mailto:matthewcrowe451@gmail.com">matthewcrowe451@gmail.com</a>.</p>'
+        + '<div class="lock-row"><input type="password" id="lockPw' + i + '" aria-label="Password" placeholder="Password" autocomplete="off"><button type="submit">Unlock</button></div><div class="lock-err" role="alert"></div></form>';
+      v.appendChild(box);
+      const form = box.querySelector('form'), input = box.querySelector('input'), err = box.querySelector('.lock-err');
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        if(hash(input.value.trim()) === KEY){
+          try{ sessionStorage.setItem(STORE, '1'); }catch(e){}
+          document.body.classList.remove('locked');
+          document.querySelectorAll('.case-lock').forEach(b => b.remove());
+          const name = v.dataset.view; if(name) document.dispatchEvent(new CustomEvent('heroplay', { detail:name }));
+        } else {
+          err.textContent = 'That password is not right.'; input.select();
+          form.classList.remove('bad'); void form.offsetWidth; form.classList.add('bad');
+        }
+      });
+      new MutationObserver(() => { if(v.classList.contains('active') && document.body.classList.contains('locked')) setTimeout(() => input.focus({ preventScroll:true }), 350); })
+        .observe(v, { attributes:true, attributeFilter:['class'] });
     });
   })();
 </script>
