@@ -784,6 +784,12 @@
   .view.active .case-lock form > :nth-child(4){ animation-delay:450ms; }
   .view.active .case-lock form > :nth-child(5){ animation-delay:450ms; }
   .view.active .case-lock form > :nth-child(6){ animation-delay:520ms; }
+  /* the padlock itself gathers out of loose particles: each dot drifts in from a scatter and eases into its place */
+  .view.active .case-lock form:not(.bad) > .lock-dots{ animation:none; }
+  .view.active .case-lock .lock-dots i{ animation:lockGather 1000ms cubic-bezier(.22,1,.36,1) calc(220ms + var(--g)) both, lockWave 3.2s ease-in-out calc(1700ms + var(--k) * 90ms) infinite; }
+  .view.active .case-lock .lock-dots i.on, .view.active .case-lock.unlocked .lock-dots i, .view.active .case-lock.opening .lock-dots i{ animation:none; }
+  .view.active .case-lock form.bad > .lock-dots, .view.active .case-lock form.bad > .lock-row{ animation:lockShake 360ms ease; }
+  @keyframes lockGather{ 0%{ opacity:0; transform:translate(var(--sx), var(--sy)) scale(.5); } 45%{ opacity:.7; } 100%{ opacity:.2; transform:none; } }
   @keyframes lockIn{ from{ opacity:0; transform:translateY(8px); filter:blur(4px); } to{ opacity:1; transform:none; filter:blur(0); } }
   @media (prefers-reduced-motion:reduce){ .case-lock form.bad .lock-dots, .case-lock form.bad .lock-row, .lock-dots i, .view.active .case-lock form > *{ animation:none; } }
   .photo-reel{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin:30px 0 12px; }
@@ -1351,6 +1357,12 @@
   .hero-dots{ transition:opacity 900ms ease; }
   .stage.pre-home .hero-dots, .stage.typing .hero-dots{ opacity:0; transition:none; }
   @media (prefers-reduced-motion:reduce){ .stage.pre-home .hero-dots, .stage.typing .hero-dots{ transform:none; } }
+
+  /* Phones: on close the floating nav pill fades as one piece, so it never sits there empty */
+  @media (max-width:640px){
+    .stage.closing .case-nav-wrap{ opacity:0; transition:opacity 240ms ease; }
+    .stage.closing .case-nav-wrap .case-nav > li{ animation:none !important; }
+  }
 </style>
 </head>
 <body>
@@ -2913,7 +2925,7 @@
       // a padlock drawn in the site's dots: shackle on top, body below with a keyhole gap
       const LOCK = ['..XXX..', '.X...X.', '.X...X.', '.X...X.', 'XXXXXXX', 'XXXXXXX', 'XXX.XXX', 'XXX.XXX', 'XXXXXXX'];
       const dots = LOCK.map((row, y) => [...row].map((c, x) => c === 'X'
-        ? '<i class="' + (y < 4 ? 'sh' : 'bd') + '" style="--k:' + (x + y) + ';--dx:' + ((x - 3) * 8 + (Math.random() - .5) * 8).toFixed(1) + 'px;--dy:' + ((y - 5) * 8 + (Math.random() - .5) * 8).toFixed(1) + 'px"></i>'
+        ? '<i class="' + (y < 4 ? 'sh' : 'bd') + '" style="--k:' + (x + y) + ';--dx:' + ((x - 3) * 8 + (Math.random() - .5) * 8).toFixed(1) + 'px;--dy:' + ((y - 5) * 8 + (Math.random() - .5) * 8).toFixed(1) + 'px;' + (() => { const a = Math.random() * 6.283, r = 45 + Math.random() * 75; return '--sx:' + (Math.cos(a) * r).toFixed(1) + 'px;--sy:' + (Math.sin(a) * r).toFixed(1) + 'px;--g:' + Math.round(Math.random() * 380) + 'ms'; })() + '"></i>'
         : '<b></b>').join('')).join('');
       box.innerHTML = '<form novalidate><div class="lock-dots" aria-hidden="true">' + dots + '</div>'
         + '<div class="lock-label">Password protected</div>'
