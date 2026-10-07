@@ -739,22 +739,53 @@
   body.locked .view .case-scroll{ visibility:hidden; }
   .case-lock{ display:none; position:absolute; inset:0; z-index:3; align-items:center; justify-content:center; padding:24px; }
   body.locked .view .case-lock{ display:flex; }
-  .case-lock form{ width:min(340px, 100%); text-align:center; }
-  .case-lock svg{ color:var(--ink-dim-hover); margin-bottom:18px; }
-  .case-lock h2{ margin:0 0 8px; font-size:17px; font-weight:500; color:var(--ink); }
-  .case-lock p{ margin:0 0 22px; font-size:13.5px; line-height:1.5; color:var(--ink-dim-hover); }
-  .case-lock p a{ color:var(--ink); }
-  .case-lock .lock-row{ display:flex; gap:8px; }
-  .case-lock input{ flex:1; min-width:0; height:44px; padding:0 14px; border-radius:12px; border:1px solid var(--card-border); background:var(--card); color:var(--ink);
-    font:inherit; font-size:15px; outline:none; transition:border-color 200ms ease; }
-  .case-lock input:focus{ border-color:var(--ink-dim-hover); }
-  .case-lock button{ height:44px; padding:0 18px; border-radius:12px; border:1px solid var(--ink); background:var(--ink); color:var(--bg); font:inherit; font-size:14px; font-weight:500; cursor:pointer;
-    transition:transform 180ms var(--spring); }
-  .case-lock button:hover{ transform:scale(1.03); }
-  .case-lock .lock-err{ min-height:18px; margin:10px 0 0; font-size:12.5px; color:#e0786f; }
-  .case-lock form.bad{ animation:lockShake 360ms ease; }
+  .case-lock form{ width:min(320px, 100%); display:flex; flex-direction:column; align-items:center; text-align:center;
+    transition:opacity 320ms ease, transform 420ms cubic-bezier(.22,1,.36,1), filter 320ms ease; }
+  /* the site's dot grid stands in for a padlock: it idles in a slow wave and lights one dot per character typed */
+  .lock-dots{ display:grid; grid-template-columns:repeat(7, 3px); gap:3px; margin-bottom:26px; }
+  .lock-dots b{ width:3px; height:3px; }
+  .lock-dots i{ width:3px; height:3px; border-radius:50%; background:var(--ink); opacity:.28;
+    animation:lockWave 3.2s ease-in-out infinite; animation-delay:calc(var(--k) * 90ms);
+    transition:opacity 220ms ease, transform 520ms cubic-bezier(.22,1,.36,1); }
+  .lock-dots i.on{ opacity:1; animation:none; transform:scale(1.2); }
+  /* right password, first beat: the shackle lifts */
+  .case-lock.unlocked .lock-dots i{ opacity:1; animation:none; }
+  .case-lock.unlocked .lock-dots i.sh{ transform:translateY(-5px); transition:transform 260ms var(--spring), opacity 160ms ease; }
+  @keyframes lockWave{ 0%,100%{ opacity:.2; } 50%{ opacity:.55; } }
+  .case-lock .lock-label{ font-family:var(--font-display); font-size:14px; letter-spacing:.04em; color:var(--ink-dim); margin:0 0 10px; }
+  .case-lock h2{ margin:0 0 26px; font-size:14px; font-weight:400; line-height:1.5; color:var(--ink); }
+  .case-lock .lock-row{ display:flex; align-items:center; gap:12px; width:100%; }
+  .case-lock input{ flex:1; min-width:0; height:40px; padding:0 2px; border:none; border-bottom:1px solid var(--card-border); border-radius:0; background:none; color:var(--ink);
+    font:inherit; font-size:15px; letter-spacing:.08em; outline:none; transition:border-color 200ms ease; }
+  .case-lock input::selection{ background:rgba(243,242,238,.22); color:var(--ink); }
+  .case-lock input::placeholder{ color:var(--ink-dim); letter-spacing:.04em; }
+  .case-lock input:focus{ border-bottom-color:var(--ink-dim-hover); }
+  .case-lock button{ flex-shrink:0; width:34px; height:34px; padding:0; border-radius:50%; border:1px solid var(--card-border); background:none; color:var(--ink-dim-hover);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition:transform 220ms var(--spring), border-color 200ms ease, color 200ms ease; }
+  .case-lock button svg{ width:14px; height:14px; stroke:currentColor; }
+  .case-lock button:hover, .case-lock button:focus-visible{ border-color:var(--ink-dim-hover); color:var(--ink); transform:scale(1.1); }
+  .case-lock button:active{ transform:scale(.9); transition-duration:90ms; }
+  .case-lock .lock-err{ min-height:20px; margin:14px 0 0; font-size:13px; color:var(--ink-dim-hover); }
+  .case-lock .lock-help{ margin:18px 0 0; font-size:13px; line-height:1.5; color:var(--ink-dim); }
+  .case-lock .lock-help a{ color:var(--ink-dim-hover); text-decoration:none; border-bottom:1px solid var(--card-border); transition:color 200ms ease, border-color 200ms ease; }
+  .case-lock .lock-help a:hover{ color:var(--ink); border-color:var(--ink-dim-hover); }
+  .case-lock form.bad .lock-dots{ animation:lockShake 360ms ease; }
+  .case-lock form.bad .lock-row{ animation:lockShake 360ms ease; }
   @keyframes lockShake{ 20%{ transform:translateX(-7px); } 40%{ transform:translateX(6px); } 60%{ transform:translateX(-4px); } 80%{ transform:translateX(2px); } }
-  @media (prefers-reduced-motion:reduce){ .case-lock form.bad{ animation:none; } }
+  /* right password: the dots scatter and the panel drops away, then the case comes forward */
+  .case-lock.opening .lock-dots i{ opacity:0; animation:none; transform:translate(var(--dx), var(--dy)) scale(.6); }
+  .case-lock.opening form{ opacity:0; transform:scale(1.04); filter:blur(4px); transition-delay:140ms; }
+  /* arriving: label, line and field come in one after another like the rest of the site */
+  .view.active .case-lock form > *{ animation:lockIn 520ms cubic-bezier(.22,1,.36,1) both; }
+  .view.active .case-lock form > :nth-child(1){ animation-delay:260ms; }
+  .view.active .case-lock form > :nth-child(2){ animation-delay:330ms; }
+  .view.active .case-lock form > :nth-child(3){ animation-delay:390ms; }
+  .view.active .case-lock form > :nth-child(4){ animation-delay:450ms; }
+  .view.active .case-lock form > :nth-child(5){ animation-delay:450ms; }
+  .view.active .case-lock form > :nth-child(6){ animation-delay:520ms; }
+  @keyframes lockIn{ from{ opacity:0; transform:translateY(8px); filter:blur(4px); } to{ opacity:1; transform:none; filter:blur(0); } }
+  @media (prefers-reduced-motion:reduce){ .case-lock form.bad .lock-dots, .case-lock form.bad .lock-row, .lock-dots i, .view.active .case-lock form > *{ animation:none; } }
   .photo-reel{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin:30px 0 12px; }
   .photo-reel img{ display:block; width:100%; height:100%; object-fit:cover; border-radius:12px; border:1px solid var(--card-border); }
   .photo-reel img:first-child{ grid-column:1 / -1; }
@@ -2879,18 +2910,34 @@
     views.forEach((v, i) => {
       if(getComputedStyle(v).position === 'static') v.style.position = 'relative';
       const box = document.createElement('div'); box.className = 'case-lock';
-      box.innerHTML = '<form novalidate><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>'
-        + '<h2>This case study is password protected</h2><p>Enter the password to view it. Need access? Email <a href="mailto:matthewcrowe451@gmail.com">matthewcrowe451@gmail.com</a>.</p>'
-        + '<div class="lock-row"><input type="password" id="lockPw' + i + '" aria-label="Password" placeholder="Password" autocomplete="off"><button type="submit">Unlock</button></div><div class="lock-err" role="alert"></div></form>';
+      // a padlock drawn in the site's dots: shackle on top, body below with a keyhole gap
+      const LOCK = ['..XXX..', '.X...X.', '.X...X.', '.X...X.', 'XXXXXXX', 'XXXXXXX', 'XXX.XXX', 'XXX.XXX', 'XXXXXXX'];
+      const dots = LOCK.map((row, y) => [...row].map((c, x) => c === 'X'
+        ? '<i class="' + (y < 4 ? 'sh' : 'bd') + '" style="--k:' + (x + y) + ';--dx:' + ((x - 3) * 8 + (Math.random() - .5) * 8).toFixed(1) + 'px;--dy:' + ((y - 5) * 8 + (Math.random() - .5) * 8).toFixed(1) + 'px"></i>'
+        : '<b></b>').join('')).join('');
+      box.innerHTML = '<form novalidate><div class="lock-dots" aria-hidden="true">' + dots + '</div>'
+        + '<div class="lock-label">Password protected</div>'
+        + '<h2>Enter the password to view this case study.</h2>'
+        + '<div class="lock-row"><input type="password" id="lockPw' + i + '" aria-label="Password" placeholder="Password" autocomplete="off">'
+        + '<button type="submit" aria-label="Unlock"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>'
+        + '<div class="lock-err" role="alert"></div>'
+        + '<p class="lock-help">Need access? <a href="mailto:matthewcrowe451@gmail.com">matthewcrowe451@gmail.com</a></p></form>';
       v.appendChild(box);
       const form = box.querySelector('form'), input = box.querySelector('input'), err = box.querySelector('.lock-err');
+      const lit = box.querySelectorAll('.lock-dots i.bd');
+      const light = () => { const n = Math.min(lit.length, input.value.length * 3); lit.forEach((d, k) => d.classList.toggle('on', k < n)); err.textContent = ''; };
+      input.addEventListener('input', light);
       form.addEventListener('submit', e => {
         e.preventDefault();
         if(hash(input.value.trim()) === KEY){
           try{ sessionStorage.setItem(STORE, '1'); }catch(e){}
-          document.body.classList.remove('locked');
-          document.querySelectorAll('.case-lock').forEach(b => b.remove());
-          const name = v.dataset.view; if(name) document.dispatchEvent(new CustomEvent('heroplay', { detail:name }));
+          const finish = () => {
+            document.body.classList.remove('locked');
+            document.querySelectorAll('.case-lock').forEach(b => b.remove());
+            const name = v.dataset.view; if(name) document.dispatchEvent(new CustomEvent('heroplay', { detail:name }));
+          };
+          if(matchMedia('(prefers-reduced-motion:reduce)').matches) finish();
+          else { box.classList.add('unlocked'); setTimeout(() => box.classList.add('opening'), 320); setTimeout(finish, 840); }
         } else {
           err.textContent = 'That password is not right.'; input.select();
           form.classList.remove('bad'); void form.offsetWidth; form.classList.add('bad');
