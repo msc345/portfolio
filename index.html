@@ -784,12 +784,7 @@
   .view.active .case-lock form > :nth-child(4){ animation-delay:450ms; }
   .view.active .case-lock form > :nth-child(5){ animation-delay:450ms; }
   .view.active .case-lock form > :nth-child(6){ animation-delay:520ms; }
-  /* the padlock itself gathers out of loose particles: each dot drifts in from a scatter and eases into its place */
-  .view.active .case-lock form:not(.bad) > .lock-dots{ animation:none; }
-  .view.active .case-lock .lock-dots i{ animation:lockGather 1400ms cubic-bezier(.55,0,.15,1) calc(520ms + var(--g)) both, lockWave 3.2s ease-in-out calc(2500ms + var(--k) * 90ms) infinite; }
-  .view.active .case-lock .lock-dots i.on, .view.active .case-lock.unlocked .lock-dots i, .view.active .case-lock.opening .lock-dots i{ animation:none; }
   .view.active .case-lock form.bad > .lock-dots, .view.active .case-lock form.bad > .lock-row{ animation:lockShake 360ms ease; }
-  @keyframes lockGather{ 0%{ opacity:0; transform:translate(var(--sx), var(--sy)) scale(.6); } 18%{ opacity:.95; } 70%{ opacity:.95; } 100%{ opacity:.2; transform:none; } }
   @keyframes lockIn{ from{ opacity:0; transform:translateY(8px); filter:blur(4px); } to{ opacity:1; transform:none; filter:blur(0); } }
   @media (prefers-reduced-motion:reduce){ .case-lock form.bad .lock-dots, .case-lock form.bad .lock-row, .lock-dots i, .view.active .case-lock form > *{ animation:none; } }
   .photo-reel{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin:30px 0 12px; }
