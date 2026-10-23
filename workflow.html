@@ -68,6 +68,7 @@
   .tool::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--faint); flex:none; transform:translateY(-1px); }
   .tool b{ font-weight:500; color:var(--ink); } .tool code{ font:12px var(--mono); color:var(--dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .tool em{ font-style:normal; font:11.5px var(--mono); color:var(--faint); margin-left:auto; white-space:nowrap; }
+  .tool em.add{ color:#5BBF8A; }
   .think{ color:var(--faint); font-style:italic; }
   .todo{ margin-left:15px; display:flex; flex-direction:column; gap:3px; font-size:13px; color:var(--dim); }
   .todo span::before{ content:'☐'; margin-right:8px; color:var(--faint); } .todo span.ok{ color:var(--faint); text-decoration:line-through; } .todo span.ok::before{ content:'☑'; }
@@ -109,7 +110,7 @@
   .ln{ display:flex; white-space:pre; padding-right:12px; }
   .ln i{ font-style:normal; width:46px; flex:none; text-align:right; padding-right:16px; color:rgba(243,242,238,.18); position:relative; }
   .ln.cur{ background:rgba(243,242,238,.035); } .ln.cur i{ color:var(--dim); }
-  .ln.add i::after{ content:''; position:absolute; right:6px; top:3px; bottom:3px; width:2px; background:rgba(243,242,238,.4); }
+  .ln.add i::after{ content:''; position:absolute; right:6px; top:3px; bottom:3px; width:2px; background:rgba(91,191,138,.75); }
   .ln span{ color:rgba(243,242,238,.62); overflow:hidden; }
   .ln .k{ color:rgba(243,242,238,.9); } .ln .s{ color:rgba(243,242,238,.42); } .ln .c{ color:rgba(243,242,238,.26); } .ln .t{ color:rgba(243,242,238,.78); }
   .ln .cursor{ display:inline-block; width:1.5px; height:14px; background:var(--ink); vertical-align:-3px; animation:blink 1s steps(1) infinite; }
@@ -120,11 +121,11 @@
 
   /* prototype: the platform's booking screen; the brand theme reskins it live */
   .stage{ flex:1; min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; }
-  .phone{ height:min(78%, 640px); aspect-ratio:9 / 19.2; border:1.5px solid var(--faint); border-radius:52px; padding:9px; }
-  .screen{ --bg:#0f0f0f; --fg:#F3F2EE; --mut:rgba(243,242,238,.5); --card:#171717; --ln:rgba(243,242,238,.08); --r:10px; --btn:#F3F2EE; --btn-fg:#0f0f0f; --acc:rgba(243,242,238,.35); --head:var(--display);
+  .phone{ height:min(90%, 740px); aspect-ratio:9 / 19.2; border:1.5px solid var(--faint); border-radius:52px; padding:9px; }
+  .screen{ --bg:#0f0f0f; --fg:#F3F2EE; --mut:rgba(243,242,238,.5); --card:#171717; --ln:rgba(243,242,238,.08); --r:10px; --btn:#F3F2EE; --btn-fg:#0f0f0f; --acc:rgba(243,242,238,.35); --act:var(--fg); --head:var(--display);
     width:100%; height:100%; border-radius:43px; background:var(--bg); color:var(--fg); position:relative; overflow:hidden; font-size:12.5px;
     transition:background .8s ease, color .8s ease; }
-  .screen.brand{ --bg:#F4F3EF; --fg:#0E1A2B; --mut:rgba(14,26,43,.55); --card:#FFFFFF; --ln:rgba(14,26,43,.1); --r:14px; --btn:#0E1A2B; --btn-fg:#F4F3EF; --acc:#B8964E; --head:'Feijoa',Georgia,serif; }
+  .screen.brand{ --bg:#F4F3EF; --fg:#13261C; --mut:rgba(19,38,28,.55); --card:#FFFFFF; --ln:rgba(19,38,28,.1); --r:14px; --btn:#145C3B; --btn-fg:#F4F3EF; --acc:#3DBE7A; --act:#145C3B; --head:'Feijoa',Georgia,serif; }
   .view{ position:absolute; inset:0; padding:50px 18px 18px; display:flex; flex-direction:column; gap:10px; transition:opacity .5s; }
   .view.co{ opacity:0; } .screen.vb .view.list{ opacity:0; } .screen.vb .view.co{ opacity:1; }
   .brandrow{ display:flex; justify-content:space-between; align-items:center; font:10.5px var(--mono); color:var(--mut); letter-spacing:.06em; }
@@ -142,12 +143,13 @@
   .bar{ display:block; border-radius:4px; background:currentColor; opacity:.13; transition:opacity .8s; }
   .card div{ gap:7px !important; }
   .co .row{ align-items:center; }
-  .av.ac{ border-color:var(--acc); color:var(--fg); }
-  .eta{ display:flex; justify-content:space-between; font-size:11.5px; padding:8px 2px 0; border-top:1px solid var(--acc); color:var(--fg); opacity:0; transform:translateY(4px); transition:opacity .4s, transform .4s, border-color .8s; }
+  .av.ac{ border-color:var(--acc); background:color-mix(in srgb, var(--acc) 14%, transparent); color:var(--fg); }
+  .eta{ display:flex; justify-content:space-between; font-size:11.5px; padding:8px 2px 0; border-top:1.5px solid var(--acc); color:var(--act); font-weight:500; opacity:0; transform:translateY(4px); transition:opacity .4s, transform .4s, border-color .8s; }
   .screen.va .eta{ opacity:1; transform:none; }
   .btn{ margin-top:auto; height:44px; border-radius:var(--r); background:var(--btn); color:var(--btn-fg); display:grid; place-items:center; font-weight:500; transition:all .8s ease; }
   .co .row{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--ln); color:var(--mut); transition:all .8s; }
   .co .row b{ font-weight:400; color:var(--fg); font-size:12px; font-variant-numeric:tabular-nums; }
+  .co .row.arr b{ color:var(--act); font-weight:500; }
   .co .row.tot{ color:var(--fg); border:0; }
   .variants{ display:flex; gap:4px; padding:3px; border:1px solid var(--line); border-radius:99px; font:11.5px var(--mono); opacity:0; transition:opacity .5s; }
   .variants.on{ opacity:1; }
@@ -207,7 +209,7 @@
           <div class="row"><span>To</span><span class="bar" style="width:92px;height:8px"></span></div>
           <div class="row"><span>Amount</span><b>$1,200.00</b></div>
           <div class="row"><span>Fee</span><b>$0.00</b></div>
-          <div class="row"><span>Arrives</span><b>Today, 5:00 pm</b></div>
+          <div class="row arr"><span>Arrives</span><b>Today, 5:00 pm</b></div>
           <div class="row tot"><span>From</span><span class="bar" style="width:80px;height:8px"></span></div>
           <div class="btn">Send</div>
         </div>
@@ -233,7 +235,7 @@
     ['skills', 0, '.claude/skills', 'd'], ['sk1', 1, 'build-slice.md', 'f'], ['sk2', 1, 'log-decision.md', 'f'],
     ['research', 0, 'research', 'd'], ['kick', 1, 'kickoff-notes.md', 'f'], ['int', 1, 'interviews/', 'f', 0, '6'],
     ['context', 0, 'context', 'd'], ['overview', 1, 'overview.md', 'f', 1], ['personas', 1, 'personas.md', 'f', 1], ['journeys', 1, 'journey-map.md', 'f', 1], ['flows', 1, 'user-flows.md', 'f', 1], ['brand', 1, 'brand.md', 'f', 1],
-    ['decisions', 0, 'decisions', 'd'], ['d1', 1, '001-arrival-before-confirm.md', 'f', 1], ['d2', 1, '002-gold-accents-only.md', 'f', 1],
+    ['decisions', 0, 'decisions', 'd'], ['d1', 1, '001-arrival-before-confirm.md', 'f', 1], ['d2', 1, '002-green-tint-accents-only.md', 'f', 1],
   ];
   const FILE = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1h4.5l2.5 2.5V11h-7z"/></svg>';
   $('#tree').innerHTML = TREE.map(([k, dep, l, kind, , n]) => `<div class="${kind}" data-k="${k}" style="padding-left:${dep * 16}px">${kind === 'f' ? FILE : ''}${l}${n ? `<em>${n}</em>` : ''}</div>`).join('');
@@ -256,7 +258,7 @@
       "export function Button({ variant = 'primary', ...props }) {", "  return (", "    <Base", "      className={`h-11 rounded-ds px-4 ${variants[variant]}`}", "      {...props}", "    />", "  );", "}"] },
     'tokens.css': { path:'src › theme › tokens.css', lang:'css', lines:[
       "/* Platform base. Components only use tokens. */", ":root {", "  --bg: #0f0f0f;", "  --fg: #f3f2ee;", "  --card: #171717;", "  --radius: 10px;", "  --font-head: var(--font-sans);", "}", ""],
-      add:["/* Acme: values only */", "[data-brand='acme'] {", "  --bg: #f4f3ef;", "  --fg: #0e1a2b;", "  --accent: #b8964e; /* 2.4:1, accents only */", "  --radius: 14px;", "  --font-head: 'Feijoa';", "}"] },
+      add:["/* Acme: values only */", "[data-brand='acme'] {", "  --bg: #f4f3ef;", "  --fg: #13261c;", "  --accent: #3dbe7a; /* 2.2:1, accents only */", "  --action: #145c3b; /* 7.3:1 */", "  --radius: 14px;", "  --font-head: 'Feijoa';", "}"] },
     'send-a.tsx': { path:'src › app › send › a.tsx', lang:'tsx', lines:[],
       add:["// A: arrival and fee inline (decisions/001)", "export default function SendA({ quote }) {", "  return (", "    <Screen title='Send'>", "      <Amount value={quote.amount} />",
         "      <Payee {...quote.to} />", "      <Eta arrives={quote.arrives} fee={quote.fee} />", "      <Button>Continue</Button>", "    </Screen>", "  );", "}"] },
@@ -297,8 +299,8 @@
     { session:'Acme · theme', mode:'Edit automatically', file:'tokens.css', panel:'#pDs',
       prompt:'Theme the platform for Acme. Components stay untouched; check contrast.',
       steps:[['tool','Read', 'context/brand.md', '', () => lit('brand')], ['edit','tokens.css'],
-        ['say','Acme gold is 2.4:1 on ivory, so it’s for accents only; text and actions stay navy. No component changed.'],
-        ['tool','Write', 'decisions/002-gold-accents-only.md', '', () => write('d2')], ['sent','Theme shared', 'acme.vercel.app/ds']] },
+        ['say','Acme’s green is 2.2:1 on ivory, so the bright tint is for accents only; actions use the deep shade at 7.3:1. No component changed.'],
+        ['tool','Write', 'decisions/002-green-tint-accents-only.md', '', () => write('d2')], ['sent','Theme shared', 'acme.vercel.app/ds']] },
     { session:'Acme · send', mode:'Edit automatically', file:'send-a.tsx', panel:'#pProto',
       prompt:'Prototype send money two ways: arrival and fee inline, or on a review step. One preview each.',
       steps:[['tool','Read', 'context/user-flows.md', '', () => lit('flows')], ['tool','Read', 'decisions/001-arrival-before-confirm.md', '', () => lit('d1')], ['edit','send-a.tsx'], ['edit','send-b.tsx'],
@@ -329,14 +331,14 @@
     t += 300;
     A.steps.forEach(s => {
       const [k] = s;
-      if(k === 'tool'){ at(t, () => { add(`<div class="tool"><b>${s[1]}</b><code>${s[2]}</code>${s[3] ? `<em>${s[3]}</em>` : ''}</div>`); s[4] && s[4](); }); t += s[1] === 'Write' && s[3] ? 1100 : 650; }
+      if(k === 'tool'){ at(t, () => { add(`<div class="tool"><b>${s[1]}</b><code>${s[2]}</code>${s[3] ? `<em${s[3][0] === '+' ? ' class="add"' : ''}>${s[3]}</em>` : ''}</div>`); s[4] && s[4](); }); t += s[1] === 'Write' && s[3] ? 1100 : 650; }
       if(k === 'think'){ at(t, () => add(`<div class="think">${s[1]}</div>`)); t += 800; }
       if(k === 'todo'){ at(t, () => add(`<div class="tool"><b>Update todos</b></div>`)); at(t + 150, () => add(`<div class="todo">${s[1].map(([l, ok]) => `<span class="${ok ? 'ok' : ''}">${l}</span>`).join('')}</div>`)); t += 1200; }
       if(k === 'say'){ at(t, () => add(`<div class="say">${s[1]}</div>`)); t += 2600; }
       if(k === 'sent'){ at(t, () => add(`<div class="sent"><span>${s[1]}</span><span>${s[2]}</span></div>`)); t += 700; }
       if(k === 'edit'){
         const f = s[1], lines = FILES[f].add;
-        at(t, () => add(`<div class="tool"><b>${ED.buf[f].length ? 'Edit' : 'Write'}</b><code>${f}</code><em>+${lines.length}</em></div>`));
+        at(t, () => add(`<div class="tool"><b>${ED.buf[f].length ? 'Edit' : 'Write'}</b><code>${f}</code><em class="add">+${lines.length}</em></div>`));
         at(t + 100, () => openFile(f));
         lines.forEach((l, i) => at(t + 350 + i * 130, () => typeLine(f, l)));
         const done = t + 350 + lines.length * 130;
