@@ -36,6 +36,8 @@
   body.pre .p, body.pre .foot{ opacity:0; transform:translateY(22px) scale(.97); }
   body.in .p, body.in .foot{ transition:opacity .6s ease, transform .8s var(--spring); }
   body.in .steer{ transition-delay:.05s; } body.in .ctx{ transition-delay:.13s; } body.in .ds{ transition-delay:.21s; } body.in .proto{ transition-delay:.29s; } body.in .foot{ transition-delay:.45s; }
+  body.out .p, body.out .foot{ opacity:0; transform:translateY(14px) scale(.98); transition:opacity .26s ease, transform .3s ease; }
+  body.out .foot{ transition-delay:0s; } body.out .proto{ transition-delay:.03s; } body.out .ds{ transition-delay:.06s; } body.out .ctx{ transition-delay:.09s; } body.out .steer{ transition-delay:.12s; }
   .steer{ grid-row:1 / 3; padding-bottom:22px; } .ctx{ grid-column:2; } .ds{ grid-column:2; grid-row:2; padding-bottom:0; } .proto{ grid-column:3; grid-row:1 / 3; }
   .ph{ display:flex; justify-content:space-between; align-items:center; margin-bottom:clamp(14px,2.6vh,30px); flex:none; }
   .ph h2{ margin:0; font:12px var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--faint); transition:color .5s; }
@@ -367,13 +369,15 @@
   }
   // every open plays from the first act
   function play(){
+    clearTimeout(stopT);
     document.body.classList.remove('out', 'in'); document.body.classList.add('pre');
     resetAll(); idx = 0; start = 0;
     if(reduce){ T.forEach(([, fn]) => fn()); document.body.classList.remove('pre'); return; }   // the finished last act, no motion
     requestAnimationFrame(() => requestAnimationFrame(() => { document.body.classList.add('in'); document.body.classList.remove('pre'); }));
     if(!running){ running = true; setTimeout(() => requestAnimationFrame(tick), 500); }
   }
-  function stop(){ running = false; document.body.classList.add('out'); }
+  let stopT = 0;
+  function stop(){ document.body.classList.remove('in'); document.body.classList.add('out'); stopT = setTimeout(() => { running = false; }, 400); }
   addEventListener('message', e => { if(e.data && e.data.wf === 'play') play(); if(e.data && e.data.wf === 'leave') stop(); });
   resetAll();
   if(!embedded) play(); else document.body.classList.add('pre');
