@@ -86,7 +86,7 @@
 
   /* product context: the repo the agent works from */
   .tree{ display:flex; flex-direction:column; font:12px/1 var(--mono); overflow:hidden; }
-  .tree > div{ display:flex; align-items:center; gap:8px; height:clamp(18px,2.55vh,24px); color:var(--faint); transition:color .35s, opacity .4s, height .4s; overflow:hidden; white-space:nowrap; }
+  .tree > div{ display:flex; align-items:center; gap:8px; height:clamp(18px,2.55vh,24px); color:var(--dim); transition:color .35s, opacity .4s, height .4s; overflow:hidden; white-space:nowrap; }
   .tree .d{ color:var(--dim); }
   .tree .d::before{ content:'▾'; font-size:9px; width:10px; color:var(--faint); }
   .tree .f::before{ content:''; width:10px; }
@@ -238,10 +238,7 @@
   const FILE = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1h4.5l2.5 2.5V11h-7z"/></svg>';
   $('#tree').innerHTML = TREE.map(([k, dep, l, kind, , n]) => `<div class="${kind}" data-k="${k}" style="padding-left:${dep * 16}px">${kind === 'f' ? FILE : ''}${l}${n ? `<em>${n}</em>` : ''}</div>`).join('');
   const node = k => $(`#tree [data-k="${k}"]`);
-  const lit = (k, on = true) => node(k).classList.toggle('on', on);
-  const write = k => { const n = node(k); n.classList.remove('gone'); n.classList.add('on', 'wrote'); };
-  const resetTree = () => TREE.forEach(([k, , , , hid]) => { const n = node(k); n.classList.remove('on', 'wrote'); n.classList.toggle('gone', !!hid); });
-  const dimTree = () => $$('#tree .on').forEach(n => n.classList.remove('on'));
+  const lit = () => {}, write = () => {}, resetTree = () => {}, dimTree = () => {};   // product context stays still
 
   /* ---------- editor ---------- */
   const KW = /\b(import|from|export|function|return|const|type|default)\b/g;
